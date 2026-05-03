@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arogya – Send Notification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #F0F4FF; min-height: 100vh; }
+        .sidebar { width: 260px; height: 100vh; background: #1A1D27; position: fixed; left: 0; top: 0; z-index: 200; display: flex; flex-direction: column; }
+        .sidebar-brand { padding: 1.75rem 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .sidebar-brand h1 { color: #fff; font-size: 1.3rem; font-weight: 800; }
+        .sidebar-brand span { color: #2D68FE; }
+        .sidebar-brand p { color: #6c757d; font-size: 0.78rem; margin-top: 0.2rem; }
+        .sidebar-nav { padding: 1rem 0; flex: 1; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; color: #adb5bd; text-decoration: none; font-weight: 500; font-size: 0.92rem; transition: all 0.2s; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(45,104,254,0.12); color: #2D68FE; border-left: 3px solid #2D68FE; }
+        .sidebar-nav .icon { font-size: 1.1rem; width: 24px; text-align: center; }
+        .sidebar-bottom { padding: 1rem 1.5rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.07); }
+        .sidebar-user { color: #fff; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.75rem; }
+        .sidebar-user small { display: block; color: #6c757d; font-size: 0.75rem; font-weight: 400; }
+        .btn-logout { width: 100%; padding: 0.6rem; background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.3); color: #dc3545; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; text-decoration: none; display: block; text-align: center; }
+        .btn-logout:hover { background: #dc3545; color: #fff; }
+        .main { margin-left: 260px; min-height: 100vh; }
+        .topbar { background: #fff; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .topbar h2 { font-size: 1.2rem; font-weight: 700; color: #1A1D27; }
+        .content { padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .section-card { background: #fff; border-radius: 16px; padding: 1.75rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: #1A1D27; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.88rem; color: #495057; margin-bottom: 0.4rem; }
+        .form-control { width: 100%; padding: 0.7rem 0.9rem; border: 2px solid #dee2e6; border-radius: 10px; font-family: inherit; font-size: 0.9rem; outline: none; transition: border 0.2s; box-sizing: border-box; }
+        .form-control:focus { border-color: #2D68FE; }
+        .btn { padding: 0.7rem 1.5rem; border-radius: 10px; font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; width: 100%; margin-top: 0.5rem; }
+        .btn-primary { background: #2D68FE; color: #fff; }
+        .btn-primary:hover { background: #1a5de5; }
+        .btn-success { background: #059669; color: #fff; }
+        .btn-warning { background: #d97706; color: #fff; }
+        .alert { padding: 0.85rem 1rem; border-radius: 10px; font-size: 0.88rem; font-weight: 500; margin-bottom: 1rem; }
+        .alert-success { background: #ECFDF5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #FFF1F2; color: #9f1239; border: 1px solid #fecdd3; }
+        .tip-box { background: #EFF6FF; border-radius: 12px; padding: 1rem 1.25rem; border-left: 4px solid #2D68FE; margin-bottom: 1rem; }
+        .tip-box h4 { color: #1e40af; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .tip-box p { color: #3b82f6; font-size: 0.82rem; line-height: 1.6; }
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-brand"><h1>🏥 Arogya <span>Admin</span></h1><p>Hospital Management System</p></div>
+    <nav class="sidebar-nav">
+        <a href="{{ url_for('admin_dashboard') }}"><span class="icon">📊</span> Dashboard</a>
+        <a href="{{ url_for('admin_hospitals_page') }}"><span class="icon">🏥</span> Hospitals</a>
+        <a href="{{ url_for('doctors_page') }}"><span class="icon">👨‍⚕️</span> Doctors</a>
+        <a href="{{ url_for('patients_page') }}"><span class="icon">🧑‍🤝‍🧑</span> Patients</a>
+        <a href="{{ url_for('admin_appointments_page') }}"><span class="icon">📅</span> Appointments</a>
+        <a href="{{ url_for('admin_notify_page') }}" class="active"><span class="icon">🔔</span> Send Notification</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-user">{{ current_user.name }}<small>Administrator</small></div>
+        <a href="{{ url_for('logout_page') }}" class="btn-logout">Logout</a>
+    </div>
+</aside>
+
+<main class="main">
+    <div class="topbar"><h2>🔔 Send Notifications</h2></div>
+    <div class="content">
+
+        <!-- SINGLE PATIENT NOTIFY -->
+        <div class="section-card">
+            <div class="section-title">📩 Notify a Specific Patient</div>
+            <div class="tip-box">
+                <h4>Slot Arranged Notification</h4>
+                <p>Use this to inform a patient when their new appointment slot has been arranged after a doctor cancellation.</p>
+            </div>
+            <div id="singleMsg"></div>
+            <div class="form-group">
+                <label>Select Patient</label>
+                <select class="form-control" id="singlePatient">
+                    <option value="">-- Select Patient --</option>
+                    {% for p in patients %}
+                    <option value="{{ p.id }}">{{ p.name }} ({{ p.email }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>New Appointment Date</label>
+                <input type="date" class="form-control" id="singleDate">
+            </div>
+            <div class="form-group">
+                <label>New Time Slot</label>
+                <input type="time" class="form-control" id="singleTime">
+            </div>
+            <div class="form-group">
+                <label>Or Custom Message (optional)</label>
+                <textarea class="form-control" id="singleMsg2" rows="3" placeholder="Type a custom message..."></textarea>
+            </div>
+            <button class="btn btn-success" onclick="sendSingle()">Send Notification</button>
+        </div>
+
+        <!-- BROADCAST -->
+        <div class="section-card">
+            <div class="section-title">📢 Broadcast to All Patients</div>
+            <div class="tip-box">
+                <h4>System-Wide Announcement</h4>
+                <p>Send the same message to all registered patients at once — useful for maintenance notices, health alerts, or general announcements.</p>
+            </div>
+            <div id="broadcastMsg"></div>
+            <div class="form-group">
+                <label>Message Type</label>
+                <select class="form-control" id="broadcastType">
+                    <option value="info">Info (blue)</option>
+                    <option value="warning">Warning (amber)</option>
+                    <option value="success">Good News (green)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea class="form-control" id="broadcastMessage" rows="5" placeholder="Type your broadcast message to all patients..."></textarea>
+            </div>
+            <button class="btn btn-warning" onclick="sendBroadcast()">Broadcast to All Patients</button>
+
+            <!-- DOCTOR UNAVAILABILITY -->
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f3f5;">
+                <div class="section-title" style="margin-bottom:1rem;">⚠️ Mark Doctor Unavailable</div>
+                <div id="unavailMsg"></div>
+                <div class="form-group">
+                    <label>Select Doctor</label>
+                    <select class="form-control" id="unavailDoctor">
+                        <option value="">-- Select Doctor --</option>
+                        {% for doc in all_doctors %}
+                        <option value="{{ doc.id }}">Dr. {{ doc.user.name }} – {{ doc.specialization }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" class="form-control" id="unavailDate">
+                </div>
+                <div class="form-group">
+                    <label>Reason</label>
+                    <input type="text" class="form-control" id="unavailReason" placeholder="e.g. Medical Leave">
+                </div>
+                <button class="btn btn-primary" onclick="submitUnavail()">Mark & Notify Patients</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+async function sendSingle() {
+    const patientId = document.getElementById('singlePatient').value;
+    const date = document.getElementById('singleDate').value;
+    const time = document.getElementById('singleTime').value;
+    const customMsg = document.getElementById('singleMsg2').value;
+    const msgEl = document.getElementById('singleMsg');
+    if (!patientId) { msgEl.innerHTML = '<div class="alert alert-error">Please select a patient.</div>'; return; }
+    const body = { patient_id: parseInt(patientId) };
+    if (customMsg) body.message = customMsg;
+    else { body.new_date = date; body.new_time = time; }
+    const res = await fetch('/api/admin/notify-patient', { method: 'POST', credentials: 'include', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    msgEl.innerHTML = res.ok ? `<div class="alert alert-success">${data.message}</div>` : `<div class="alert alert-error">${data.error}</div>`;
+}
+
+async function sendBroadcast() {
+    const message = document.getElementById('broadcastMessage').value;
+    const type = document.getElementById('broadcastType').value;
+    const msgEl = document.getElementById('broadcastMsg');
+    if (!message) { msgEl.innerHTML = '<div class="alert alert-error">Please write a message first.</div>'; return; }
+    if (!confirm(`Broadcast this message to ALL patients?`)) return;
+    const res = await fetch('/api/admin/broadcast', { method: 'POST', credentials: 'include', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message, type }) });
+    const data = await res.json();
+    msgEl.innerHTML = res.ok ? `<div class="alert alert-success">${data.message}</div>` : `<div class="alert alert-error">${data.error}</div>`;
+}
+
+async function submitUnavail() {
+    const doctorId = document.getElementById('unavailDoctor').value;
+    const date = document.getElementById('unavailDate').value;
+    const reason = document.getElementById('unavailReason').value || 'Leave';
+    const msgEl = document.getElementById('unavailMsg');
+    if (!doctorId || !date) { msgEl.innerHTML = '<div class="alert alert-error">Please fill all fields.</div>'; return; }
+    const res = await fetch(`/api/admin/doctor/${doctorId}/unavailability`, { method: 'POST', credentials: 'include', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ date, reason }) });
+    const data = await res.json();
+    msgEl.innerHTML = res.ok ? `<div class="alert alert-success">${data.message}</div>` : `<div class="alert alert-error">${data.error}</div>`;
+}
+</script>
+</body>
+</html>
