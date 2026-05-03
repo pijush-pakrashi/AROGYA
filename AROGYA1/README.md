@@ -161,9 +161,5 @@ A robust alerting system keeps patients informed of critical updates.
 - **Doctor Unavailability System:** When an admin marks a doctor as unavailable for a specific date, all affected patients receive an automated, empathetic alert letting them know their appointment is paused while a new slot is arranged.
 - **System Broadcasts:** Send announcements to all registered patients simultaneously.
 
-> *(Add your screenshot here: `![Notifications](docs/notifications.png)`)*
-
----
-
 **Author**: Pijush Pakrashi – Heritage Institute of Technology  
 **Version**: 1.0 | © 2026
